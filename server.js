@@ -1,6 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const res = require("express/lib/response");
 const app = express();
+app.use(bodyParser.json());
+
+app.use(express.static("public"));
 
 const MongoClient = require("mongodb").MongoClient;
 const connectionString =
@@ -11,15 +15,16 @@ MongoClient.connect(connectionString)
     console.log("Connected to Database");
     const db = client.db("mitm-quotes");
     const quotesCollection = db.collection("quotes");
-
     app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.set("view engine", "ejs");
 
     app.get("/", (req, res) => {
       quotesCollection
         .find()
         .toArray()
         .then((results) => {
-          console.log(results);
+          res.render("index.ejs", { quotes: results });
         })
         .catch((error) => console.error(error));
     });
@@ -32,7 +37,9 @@ MongoClient.connect(connectionString)
         })
         .catch((error) => console.error(error));
     });
-
+    app.put("/quotes", (req, res) => {
+      console.log(req.body);
+    });
     app.listen(3000);
   })
   .catch((error) => console.error(error));
