@@ -18,3 +18,11 @@ app.post("/quotes", (req, res) => {
   console.log("bork");
   console.log(req.body);
 });
+
+const MongoClient = require("mongodb").MongoClient;
+const connectionString =
+  "mongodb+srv://suphpdev:aiqOygEnPL9tOUmd@cluster0.gwdon.mongodb.net/?retryWrites=true&w=majority";
+MongoClient.connect(connectionString, (err, client) => {
+  if (err) return console.error(err);
+  console.log("Connected to Database");
+});
