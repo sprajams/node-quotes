@@ -54,6 +54,15 @@ MongoClient.connect(connectionString)
         })
         .catch((error) => console.error(error));
     });
+
+    app.delete("/quotes", (req, res) => {
+      quotesCollection
+        .deleteOne({ name: req.body.name })
+        .then((result) => {
+          res.json(`Deleted Walt's quote`);
+        })
+        .catch((error) => console.error(error));
+    });
     app.listen(3000);
   })
   .catch((error) => console.error(error));

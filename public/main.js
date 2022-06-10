@@ -1,6 +1,6 @@
-const update = document.querySelector("#update-btn");
+const updateBtn = document.querySelector("#update-btn");
 
-update.addEventListener("click", (_) => {
+updateBtn.addEventListener("click", (_) => {
   fetch("/quotes", {
     method: "put",
     // tell server we're sending JSON data
@@ -15,7 +15,27 @@ update.addEventListener("click", (_) => {
       if (res.ok) return res.json();
     })
     .then((response) => {
-      console.log(response);
+      window.location.reload(true);
     });
-  console.log("clicked");
+  console.log("updatee");
+});
+
+const deleteBtn = document.querySelector("#delete-btn");
+deleteBtn.addEventListener("click", (_) => {
+  fetch("/quotes", {
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: "Walter White",
+    }),
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+    })
+    .then((data) => {
+      window.location.reload();
+    });
+  console.log("deleteeee");
 });
