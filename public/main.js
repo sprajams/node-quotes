@@ -21,6 +21,7 @@ updateBtn.addEventListener("click", (_) => {
 });
 
 const deleteBtn = document.querySelector("#delete-btn");
+const messageDiv = document.querySelector("#message");
 deleteBtn.addEventListener("click", (_) => {
   fetch("/quotes", {
     method: "delete",
@@ -34,8 +35,11 @@ deleteBtn.addEventListener("click", (_) => {
     .then((res) => {
       if (res.ok) return res.json();
     })
-    .then((data) => {
-      window.location.reload();
+    .then((res) => {
+      if (res === "No quote to delete") {
+        messageDiv.textContent = "No sign of Walt";
+      } else {
+        window.location.reload();
+      }
     });
-  console.log("deleteeee");
 });
