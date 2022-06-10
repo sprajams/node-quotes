@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const res = require("express/lib/response");
+const req = require("express/lib/request");
 const app = express();
-app.use(bodyParser.json());
+
+app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 
@@ -12,12 +14,10 @@ const connectionString =
 
 MongoClient.connect(connectionString)
   .then((client) => {
-    console.log("Connected to Database");
     const db = client.db("mitm-quotes");
     const quotesCollection = db.collection("quotes");
     app.use(bodyParser.urlencoded({ extended: true }));
-
-    app.set("view engine", "ejs");
+    app.use(bodyParser.json());
 
     app.get("/", (req, res) => {
       quotesCollection
@@ -38,7 +38,21 @@ MongoClient.connect(connectionString)
         .catch((error) => console.error(error));
     });
     app.put("/quotes", (req, res) => {
-      console.log(req.body);
+      quotesCollection
+        .findOneAndUpdate(
+          { name: "Hal" },
+          {
+            $set: {
+              name: req.body.name,
+              quote: req.body.quote,
+            },
+          },
+          { upsert: true }
+        )
+        .then((result) => {
+          res.json("Success");
+        })
+        .catch((error) => console.error(error));
     });
     app.listen(3000);
   })
