@@ -43,9 +43,9 @@ app.get("/", (req, res) => {
 // create operation
 app.post("/quotes", (req, res) => {
   quotesCollection
-    .insertOne(req.body)
+    .insertOne(req.body) // add items into MongoDB collection
     .then((result) => {
-      res.redirect("/");
+      res.redirect("/"); // refresh back to root
     })
     .catch((error) => console.error(error));
 });
