@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 // create server for browser to connect to
 app.listen(3000);
+require("dotenv").config();
 
 // body-parser is a middleware, helps handle data from <form>
 const bodyParser = require("body-parser");
@@ -18,12 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 let db, quotesCollection;
-
+let dbConnectionString = process.env.connectionString;
 // connecting to MongoDB
 const MongoClient = require("mongodb").MongoClient;
-const connectionString =
-  "mongodb+srv://suphpdev:aiqOygEnPL9tOUmd@cluster0.gwdon.mongodb.net/?retryWrites=true&w=majority";
-MongoClient.connect(connectionString)
+MongoClient.connect(dbConnectionString)
   .then((client) => {
     db = client.db("mitm-quotes");
     quotesCollection = db.collection("quotes");
